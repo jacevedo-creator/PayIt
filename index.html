@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Covisian - Learning & Operations Portal</title>
+    <style>
+        :root {
+            --primary-color: #003366; /* Azul corporativo estilo Covisian */
+            --accent-color: #00a8cc;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-color: #2d3748;
+            --text-muted: #718096;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            align-items: center;
+        }
+
+        /* HEADER / NAVBAR */
+        header {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 0.95rem;
+            color: #cbd5e0;
+            margin-top: 5px;
+        }
+
+        /* MAIN CONTENT CONTAINER */
+        .main-container {
+            max-width: 1000px;
+            width: 90%;
+            margin: 40px auto;
+            text-align: center;
+            flex: 1;
+        }
+
+        .welcome-title {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .welcome-subtitle {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+
+        /* CARDS GRID */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px 20px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 4px solid var(--accent-color);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+        }
+
+        .card-icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+        }
+
+        .card h2 {
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 12px 0;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 6px;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-color);
+        }
+
+        /* FOOTER */
+        footer {
+            width: 100%;
+            background-color: #e2e8f0;
+            text-align: center;
+            padding: 15px 0;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>COVISIAN</h1>
+        <p>Operational Training & Knowledge Portal</p>
+    </header>
+
+    <div class="main-container">
+        <h2 class="welcome-title">Interactive Training Activities</h2>
+        <p class="welcome-subtitle">Select an activity below to test your operational knowledge and terminology.</p>
+
+        <div class="cards-grid">
+            <!-- CARD 1: CROSSWORD -->
+            <div class="card">
+                <div>
+                    <div class="card-icon">🧩</div>
+                    <h2>Crossword Puzzle</h2>
+                    <p>Solve the interactive operational crossword puzzle based on procedure manuals and documentation.</p>
+                </div>
+                <a href="crucigrama.html" class="btn">Start Crossword</a>
+            </div>
+
+            <!-- CARD 2: WORD SEARCH -->
+            <div class="card">
+                <div>
+                    <div class="card-icon">🔍</div>
+                    <h2>Word Search</h2>
+                    <p>Find the key operational concepts and acronyms hidden in the word grid as fast as you can.</p>
+                </div>
+                <a href="sopa_de_letras.html" class="btn">Start Word Search</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; Covisian Group. All rights reserved. Operational Instructional Design.
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operational Word Search</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 { color: #1a365d; margin-bottom: 5px; }
+        .header-panel {
+            background: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+        .timer { font-size: 1.2rem; font-weight: bold; color: #e53e3e; }
+        .user-input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        .container { display: flex; gap: 30px; max-width: 1000px; width: 100%; }
+        #grid {
+            display: grid;
+            grid-template-columns: repeat(12, 38px);
+            grid-gap: 3px;
+            background: #2b6cb0;
+            padding: 10px;
+            border-radius: 8px;
+            user-select: none;
+        }
+        .cell {
+            width: 38px;
+            height: 38px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            cursor: pointer;
+            border-radius: 3px;
+            color: #4a5568;
+            font-weight: bold;
+        }
+        .cell.selected { background: #f6ad55 !important; color: white !important; }
+        .cell.found { background: #48bb78 !important; color: white !important; }
+
+        .word-list {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            flex: 1;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .word-item { margin-bottom: 12px; padding: 5px; border-bottom: 1px solid #edf2f7; }
+        .word-item.completed { text-decoration: line-through; color: #a0aec0; }
+        .word-title { font-weight: bold; color: #2d3748; }
+        .word-clue { font-size: 0.85rem; color: #718096; }
+        button {
+            background: #3182ce;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        button:hover { background: #2b6cb0; }
+    </style>
+</head>
+<body>
+
+    <h1>Operational Word Search Challenge</h1>
+
+    <div class="header-panel">
+        <div>
+            <label><strong>Agent Email:</strong> </label>
+            <input type="email" id="agentEmail" class="user-input" placeholder="agent@company.com" required>
+        </div>
+        <div class="timer">⏱️ Time: <span id="timeDisplay">0s</span></div>
+        <button id="startBtn" onclick="startGame()">Start Activity</button>
+    </div>
+
+    <div class="container" id="gameArea" style="display:none;">
+        <div id="grid"></div>
+        <div class="word-list">
+            <h3>Words & Operational Clues</h3>
+            <div id="wordsContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxKoNiGHJPtgLaYYLhe_VRYVvPMV-_xhJgQwI2lOqlPUfklui09eRLoXDyVRbtJZmbD/exec";
+        const wordsData = [{"word": "FIVE9", "clue": "Platform utilized for managing call dispositions and customer interactions.", "category": "Tools"}, {"word": "PORTAL", "clue": "Digital interface where agents manage licensing and retail transactions.", "category": "Procedures"}, {"word": "WALLET", "clue": "Feature within the user profile for managing payment methods and history.", "category": "Operations"}, {"word": "REPRINT", "clue": "Procedure initiated when a physical license document fails to generate correctly.", "category": "Procedures"}, {"word": "PROFILE", "clue": "Database record containing customer personal information and contact details.", "category": "Operations"}, {"word": "TICKET", "clue": "Internal log documentation for tracking customer inquiries and support actions.", "category": "Operations"}, {"word": "LICENSE", "clue": "Regulatory permit purchased through the system for hunting or fishing activities.", "category": "Terminology"}, {"word": "TERMINAL", "clue": "Hardware device used by retail agents to process sales and printing tasks.", "category": "Tools"}, {"word": "BADGE", "clue": "Unique identifier required by conservation agents to verify account access.", "category": "Terminology"}, {"word": "DISPOSE", "clue": "Action of selecting the specific classification for a completed call.", "category": "Procedures"}];
+        let words = [];
+        const gridSize = 12;
+        let grid = Array(gridSize).fill(null).map(() => Array(gridSize).fill(''));
+        let startCell = null;
+        let isMouseDown = false;
+        let foundWords = 0;
+        let timerInterval = null;
+        let secondsElapsed = 0;
+        let activePathEls = [];
+
+        const DIRECTIONS = [
+            { dr: 0, dc: 1 }, { dr: 0, dc: -1 },
+            { dr: 1, dc: 0 }, { dr: -1, dc: 0 },
+            { dr: 1, dc: 1 }, { dr: 1, dc: -1 },
+            { dr: -1, dc: 1 }, { dr: -1, dc: -1 }
+        ];
+
+        function startGame() {
+            const email = document.getElementById('agentEmail').value;
+            if(!email || !email.includes('@')) {
+                alert('Please enter a valid agent email before starting.');
+                return;
+            }
+            document.getElementById('startBtn').style.display = 'none';
+            document.getElementById('agentEmail').disabled = true;
+            document.getElementById('gameArea').style.display = 'flex';
+
+            timerInterval = setInterval(() => {
+                secondsElapsed++;
+                document.getElementById('timeDisplay').innerText = `${secondsElapsed}s`;
+            }, 1000);
+
+            generateGridAdvanced();
+            renderGrid();
+            renderWordList();
+        }
+
+        function generateGridAdvanced() {
+            const rawWords = ["FIVE9", "PORTAL", "WALLET", "REPRINT", "PROFILE", "TICKET", "LICENSE", "TERMINAL", "BADGE", "DISPOSE"];
+            rawWords.sort((a, b) => b.length - a.length);
+            words = [];
+
+            grid = Array(gridSize).fill(null).map(() => Array(gridSize).fill(''));
+
+            rawWords.forEach(word => {
+                let placed = false;
+                let attempts = 0;
+
+                while (!placed && attempts < 300) {
+                    attempts++;
+                    const dir = DIRECTIONS[Math.floor(Math.random() * DIRECTIONS.length)];
+                    const row = Math.floor(Math.random() * gridSize);
+                    const col = Math.floor(Math.random() * gridSize);
+
+                    const endRow = row + dir.dr * (word.length - 1);
+                    const endCol = col + dir.dc * (word.length - 1);
+
+                    if (endRow >= 0 && endRow < gridSize && endCol >= 0 && endCol < gridSize) {
+                        let fits = true;
+                        for (let i = 0; i < word.length; i++) {
+                            let r = row + dir.dr * i;
+                            let c = col + dir.dc * i;
+                            if (grid[r][c] !== '' && grid[r][c] !== word[i]) {
+                                fits = false;
+                                break;
+                            }
+                        }
+
+                        if (fits) {
+                            for (let i = 0; i < word.length; i++) {
+                                let r = row + dir.dr * i;
+                                let c = col + dir.dc * i;
+                                grid[r][c] = word[i];
+                            }
+                            placed = true;
+                            words.push(word);
+                        }
+                    }
+                }
+            });
+
+            const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            for (let r = 0; r < gridSize; r++) {
+                for (let c = 0; c < gridSize; c++) {
+                    if (grid[r][c] === '') grid[r][c] = letters[Math.floor(Math.random() * letters.length)];
+                }
+            }
+        }
+
+        function renderGrid() {
+            const gridContainer = document.getElementById('grid');
+            gridContainer.innerHTML = '';
+            for (let r = 0; r < gridSize; r++) {
+                for (let c = 0; c < gridSize; c++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    cell.innerText = grid[r][c];
+                    cell.dataset.row = r;
+                    cell.dataset.col = c;
+                    cell.addEventListener('mousedown', () => onMouseDown(r, c));
+                    cell.addEventListener('mouseenter', () => onMouseEnter(r, c));
+                    gridContainer.appendChild(cell);
+                }
+            }
+            document.addEventListener('mouseup', onMouseUp);
+        }
+
+        function renderWordList() {
+            const container = document.getElementById('wordsContainer');
+            container.innerHTML = '';
+            wordsData.forEach(item => {
+                if (words.includes(item.word)) {
+                    const div = document.createElement('div');
+                    div.className = 'word-item';
+                    div.id = `word-${item.word}`;
+                    div.innerHTML = `<div class="word-title">${item.word}</div><div class="word-clue">${item.clue}</div>`;
+                    container.appendChild(div);
+                }
+            });
+        }
+
+        function onMouseDown(r, c) {
+            isMouseDown = true;
+            startCell = { r, c };
+            highlightPath(r, c);
+        }
+
+        function onMouseEnter(r, c) {
+            if (!isMouseDown || !startCell) return;
+            highlightPath(r, c);
+        }
+
+        function highlightPath(endR, endC) {
+            activePathEls.forEach(el => el.classList.remove('selected'));
+            activePathEls = [];
+
+            const path = getLineCells(startCell.r, startCell.c, endR, endC);
+            path.forEach(pos => {
+                const el = document.querySelector(`.cell[data-row="${pos.r}"][data-col="${pos.c}"]`);
+                if (el) {
+                    el.classList.add('selected');
+                    activePathEls.push(el);
+                }
+            });
+        }
+
+        function getLineCells(r1, c1, r2, c2) {
+            const dr = r2 - r1;
+            const dc = c2 - c1;
+            const stepR = dr === 0 ? 0 : dr / Math.abs(dr);
+            const stepC = dc === 0 ? 0 : dc / Math.abs(dc);
+
+            if (dr !== 0 && dc !== 0 && Math.abs(dr) !== Math.abs(dc)) return [];
+
+            const steps = Math.max(Math.abs(dr), Math.abs(dc));
+            const path = [];
+            for (let i = 0; i <= steps; i++) {
+                path.push({ r: r1 + i * stepR, c: c1 + i * stepC });
+            }
+            return path;
+        }
+
+        function onMouseUp() {
+            if (!isMouseDown) return;
+            isMouseDown = false;
+
+            let selectedWord = activePathEls.map(c => c.innerText).join('');
+            let reversedWord = selectedWord.split('').reverse().join('');
+
+            let matchedWord = words.find(w => w === selectedWord || w === reversedWord);
+
+            if (matchedWord) {
+                activePathEls.forEach(c => {
+                    c.classList.remove('selected');
+                    c.classList.add('found');
+                });
+
+                const wordElement = document.getElementById(`word-${matchedWord}`);
+                if (wordElement && !wordElement.classList.contains('completed')) {
+                    wordElement.classList.add('completed');
+                    foundWords++;
+                }
+
+                if (foundWords === words.length) {
+                    clearInterval(timerInterval);
+                    sendResultsToGoogleSheets();
+                }
+            } else {
+                activePathEls.forEach(c => c.classList.remove('selected'));
+            }
+
+            activePathEls = [];
+            startCell = null;
+        }
+
+        function sendResultsToGoogleSheets() {
+            const email = document.getElementById('agentEmail').value;
+
+            const payload = {
+                email: email,
+                activity: "Word Search",
+                time: secondsElapsed,
+                status: "COMPLETED"
+            };
+
+            if (WEBHOOK_URL) {
+                fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                }).then(() => {
+                    alert(`🎉 Activity Completed! Results synced to tracking sheet.\nTime: ${secondsElapsed} seconds.`);
+                }).catch(err => {
+                    alert(`🎉 Completed in ${secondsElapsed} seconds (Error syncing to sheet).`);
+                });
+            } else {
+                alert(`🎉 Activity Completed in ${secondsElapsed} seconds.`);
+            }
+        }
+    </script>
+</body>
+</html>
