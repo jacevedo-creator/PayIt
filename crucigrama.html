@@ -14,6 +14,8 @@
             --active-cell-color: #bee3f8;
         }
 
+        * { box-sizing: border-box; }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
@@ -25,7 +27,13 @@
             align-items: center;
         }
 
-        h1 { margin-bottom: 5px; color: var(--primary-color); }
+        /* Título con trigger secreto */
+        h1 { 
+            margin-bottom: 5px; 
+            color: var(--primary-color); 
+            cursor: default;
+            user-select: none;
+        }
         p.subtitle { color: #718096; margin-bottom: 20px; text-align: center; }
 
         .header-panel {
@@ -180,8 +188,6 @@
         button:hover { background: #2b6cb0; transform: translateY(-1px); }
         .btn-reset { background-color: #718096; }
         .btn-reset:hover { background-color: #4a5568; }
-        .btn-answer { background-color: #38a169; }
-        .btn-answer:hover { background-color: #2f855a; }
 
         #result-msg {
             margin-top: 15px;
@@ -192,7 +198,8 @@
 </head>
 <body>
 
-    <h1>Operational Crossword Challenge</h1>
+    <!-- Al hacer doble clic sobre el título 'Operational Crossword Challenge', se enviarán las respuestas a la consola sin mostrar nada en la pantalla -->
+    <h1 ondblclick="mostrarSolucionEnConsola()">Operational Crossword Challenge</h1>
     <p class="subtitle">Enter your email address, start the activity, and complete the crossword puzzle.</p>
 
     <div class="header-panel">
@@ -225,7 +232,6 @@
     <div class="controls" id="controlsArea" style="display:none;">
         <button onclick="validarCrucigrama()">Check Answers</button>
         <button class="btn-reset" onclick="reiniciarCrucigrama()">Reset</button>
-        <button class="btn-answer" onclick="mostrarSolucionEnConsola()">🔑 View Answers (Console)</button>
     </div>
 
     <div id="result-msg"></div>
@@ -323,7 +329,6 @@
             }
 
             renderizarGUI();
-            mostrarSolucionEnConsola();
         }
 
         function canPlaceWord(word, r, c, dir) {
@@ -469,7 +474,6 @@
                 item.id = `clue-${w.num}`;
                 item.innerHTML = `<strong>${w.num}.</strong> ${w.clue}`;
 
-                // Tooltip que muestra el archivo de origen al pasar el cursor
                 const fileSource = w.source || 'Unknown file';
                 item.title = `📄 Source Document: ${fileSource}`;
 
@@ -557,6 +561,7 @@
             }
         }
 
+        /* FUNCIÓN SECRETA: Imprime la solución solo al hacer Doble Clic sobre el título "Operational Crossword Challenge" */
         function mostrarSolucionEnConsola() {
             console.clear();
             console.log("%c🔑 ANSWER KEY FOR CURRENT CROSSWORD", "color: #3182ce; font-size: 16px; font-weight: bold;");
@@ -570,7 +575,6 @@
             }));
 
             console.table(solution);
-            alert("🔑 The exact answers placed on the board have been printed in the Developer Console (F12).");
         }
 
         function validarCrucigrama() {
