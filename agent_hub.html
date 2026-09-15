@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Covisian - Agent HUB</title>
+    <style>
+        :root {
+            --primary-color: #0d233a;
+            --accent-color: #10b981;
+            --bg-color: #f0f4f8;
+            --card-bg: #ffffff;
+            --text-color: #2d3748;
+            --text-muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            width: 100%;
+            background: linear-gradient(135deg, #0d233a 0%, #1a365d 100%);
+            color: white;
+            padding: 18px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+
+        .brand-logo span {
+            font-size: 0.55rem;
+            letter-spacing: 3px;
+            color: #38bdf8;
+            margin-top: 3px;
+        }
+
+        .back-link {
+            color: #cbd5e0;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #38bdf8;
+        }
+
+        .main-container {
+            max-width: 1000px;
+            width: 90%;
+            margin: 30px auto;
+            flex: 1;
+        }
+
+        .welcome-hero {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            border-left: 5px solid var(--accent-color);
+        }
+
+        .welcome-hero h1 {
+            font-size: 1.6rem;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+
+        .welcome-hero p {
+            color: var(--text-muted);
+            line-height: 1.5;
+            font-size: 0.98rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            color: var(--primary-color);
+            margin: 30px 0 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .resource-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+        }
+
+        .resource-card h3 {
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            margin-bottom: 6px;
+        }
+
+        .resource-card p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 18px;
+            line-height: 1.4;
+        }
+
+        .btn-action {
+            display: inline-block;
+            text-align: center;
+            background: #0ea5e9;
+            color: white;
+            text-decoration: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            transition: background 0.2s;
+        }
+
+        .btn-action:hover {
+            background: #0284c7;
+        }
+
+        footer {
+            width: 100%;
+            background-color: #e2e8f0;
+            text-align: center;
+            padding: 15px 0;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-container">
+            <div class="brand-logo">
+                COVISIAN
+                <span>TECH. PEOPLE. SMILES.</span>
+            </div>
+        </div>
+        <a href="index.html" class="back-link">← Back to Main Portal</a>
+    </header>
+
+    <div class="main-container">
+        
+        <div class="welcome-hero">
+            <h1>👋 Welcome to the Agent Hub!</h1>
+            <p>Have some downtime between contacts? Use the resources below to sharpen your skills, practice typing, or take a quick mental break while staying ready for your next contact.</p>
+        </div>
+
+        <!-- SECCIÓN 1 -->
+        <h2 class="section-title">⌨️ Typing & WPM Practice</h2>
+        <div class="resource-grid">
+            <div class="resource-card">
+                <div>
+                    <h3>Monkeytype</h3>
+                    <p>Simple typing-speed and accuracy practice to increase your WPM performance.</p>
+                </div>
+                <a href="https://monkeytype.com/" target="_blank" class="btn-action">Start Typing Practice ↗</a>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 2 -->
+        <h2 class="section-title">📚 Skill Building</h2>
+        <div class="resource-grid">
+            <div class="resource-card">
+                <div>
+                    <h3>Merriam-Webster Games</h3>
+                    <p>Practice and test your spelling, vocabulary, and grammar through interactive word games.</p>
+                </div>
+                <a href="https://www.merriam-webster.com/games" target="_blank" class="btn-action">Play Skill Games ↗</a>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 3 -->
+        <h2 class="section-title">🎧 Call Skills & Customer Experience</h2>
+        <div class="resource-grid">
+            <div class="resource-card">
+                <div>
+                    <h3>Interpersonal Skills Guide</h3>
+                    <p>Learn effective communication techniques and key interpersonal skills for customer interaction.</p>
+                </div>
+                <a href="https://www.skillsyouneed.com/interpersonal-skills.html?utm_source=chatgpt.com" target="_blank" class="btn-action">Read Guide ↗</a>
+            </div>
+
+            <div class="resource-card">
+                <div>
+                    <h3>Zendesk CS Insights</h3>
+                    <p>Discover 7 key ways to deliver exceptional support and elevate customer satisfaction.</p>
+                </div>
+                <a href="https://www.zendesk.com/blog/customer-service/support/what-is-customer-service/?utm_source=chatgpt.com#7-ways" target="_blank" class="btn-action">Read Article ↗</a>
+            </div>
+
+            <div class="resource-card">
+                <div>
+                    <h3>HubSpot Customer Service</h3>
+                    <p>Comprehensive strategies and best practices for modern operational customer service.</p>
+                </div>
+                <a href="https://blog.hubspot.com/service/customer-service?utm_source=chatgpt.com" target="_blank" class="btn-action">Explore Content ↗</a>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        &copy; Covisian Group. All rights reserved. Operational Instructional Design.
+    </footer>
+
+</body>
+</html>
