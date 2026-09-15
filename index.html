@@ -6,19 +6,20 @@
     <title>Covisian - Learning & Operations Portal</title>
     <style>
         :root {
-            --primary-color: #003366;
+            --primary-color: #0d233a;
             --accent-color: #00a8cc;
-            --bg-color: #f4f7f6;
+            --purple-accent: #673ab7;
+            --bg-color: #f0f4f8;
             --card-bg: #ffffff;
             --text-color: #2d3748;
-            --text-muted: #718096;
+            --text-muted: #64748b;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
 
         body {
@@ -27,88 +28,121 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            align-items: center;
         }
 
         header {
             width: 100%;
-            background-color: var(--primary-color);
+            background: linear-gradient(135deg, #0d233a 0%, #1a365d 100%);
             color: white;
-            padding: 20px 0;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            padding: 18px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
         }
 
-        header h1 {
-            font-size: 2.2rem;
-            letter-spacing: 1px;
-            font-weight: 700;
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        header p {
-            font-size: 0.95rem;
+        .brand-logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+
+        .brand-logo span {
+            font-size: 0.55rem;
+            letter-spacing: 3px;
+            color: #38bdf8;
+            margin-top: 3px;
+        }
+
+        .header-title {
+            font-size: 1rem;
             color: #cbd5e0;
-            margin-top: 5px;
+            border-left: 2px solid rgba(255,255,255,0.2);
+            padding-left: 15px;
         }
 
         .main-container {
             max-width: 1100px;
             width: 90%;
-            margin: 40px auto;
-            text-align: center;
+            margin: 30px auto;
             flex: 1;
         }
 
         .welcome-title {
             font-size: 1.8rem;
             color: var(--primary-color);
-            margin-bottom: 10px;
+            text-align: center;
+            margin-bottom: 8px;
         }
 
         .welcome-subtitle {
             font-size: 1rem;
             color: var(--text-muted);
-            margin-bottom: 40px;
+            text-align: center;
+            margin-bottom: 35px;
         }
 
         .cards-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            justify-content: center;
+            gap: 25px;
+            margin-bottom: 40px;
         }
 
         .card {
             background: var(--card-bg);
-            border-radius: 12px;
-            padding: 30px 20px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 14px;
+            padding: 30px 22px 22px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: space-between;
+            position: relative;
+            overflow: hidden;
             border-top: 4px solid var(--accent-color);
         }
 
-        .card.card-purple {
-            border-top-color: #673ab7;
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.1);
         }
 
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+        .card-tag {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: #e0f2fe;
+            color: #0284c7;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .card-icon {
-            font-size: 3.5rem;
-            margin-bottom: 15px;
+            font-size: 3rem;
+            margin: 15px 0 10px;
+            text-align: center;
         }
 
         .card h2 {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             color: var(--primary-color);
             margin-bottom: 10px;
+            text-align: center;
         }
 
         .card p {
@@ -116,30 +150,90 @@
             color: var(--text-muted);
             line-height: 1.5;
             margin-bottom: 25px;
+            text-align: center;
         }
 
         .btn {
-            display: inline-block;
+            display: block;
             width: 100%;
             padding: 12px 0;
             background-color: var(--primary-color);
             color: white;
             text-decoration: none;
-            font-weight: bold;
-            border-radius: 6px;
-            transition: background-color 0.2s ease;
+            font-weight: 600;
+            border-radius: 8px;
+            text-align: center;
+            transition: background 0.2s;
         }
 
         .btn:hover {
             background-color: var(--accent-color);
         }
 
+        .card-purple {
+            border-top-color: var(--purple-accent);
+        }
+
         .btn-purple {
-            background-color: #673ab7;
+            background-color: var(--purple-accent);
         }
 
         .btn-purple:hover {
             background-color: #512da8;
+        }
+
+        /* Banner Informativo al final */
+        .notice-banner {
+            background: #e0f2fe;
+            border-left: 4px solid var(--accent-color);
+            color: #0369a1;
+            padding: 14px 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            font-size: 0.92rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        /* Banner Agent HUB */
+        .agent-hub-banner {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 14px;
+            color: white;
+            padding: 25px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.2);
+            flex-wrap: wrap;
+        }
+
+        .agent-hub-text h3 {
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+        }
+
+        .agent-hub-text p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .btn-hub {
+            background: white;
+            color: #059669;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            white-space: nowrap;
+            transition: transform 0.2s;
+        }
+
+        .btn-hub:hover {
+            transform: scale(1.05);
         }
 
         footer {
@@ -156,45 +250,67 @@
 <body>
 
     <header>
-        <h1>COVISIAN</h1>
-        <p>Operational Training & Knowledge Portal</p>
+        <div class="brand-container">
+            <div class="brand-logo">
+                COVISIAN
+                <span>TECH. PEOPLE. SMILES.</span>
+            </div>
+        </div>
+        <div class="header-title">
+            Operational Training & Knowledge Portal
+        </div>
     </header>
 
     <div class="main-container">
+        
         <h2 class="welcome-title">Interactive Training & Activities</h2>
         <p class="welcome-subtitle">Select an activity below to test your operational knowledge, solve challenges, or complete surveys.</p>
 
+        <!-- TARJETAS PRINCIPALES PAYIT -->
         <div class="cards-grid">
-            <!-- CARD 1: CROSSWORD -->
+            <!-- CARD 1 -->
             <div class="card">
-                <div>
-                    <div class="card-icon">🧩</div>
-                    <h2>Crossword Puzzle</h2>
-                    <p>Solve the interactive operational crossword puzzle based on procedure manuals and documentation.</p>
-                </div>
+                <span class="card-tag">PayIT</span>
+                <div class="card-icon">🧩</div>
+                <h2>Crossword Puzzle</h2>
+                <p>Solve the interactive operational crossword puzzle based on procedure manuals and documentation.</p>
                 <a href="crucigrama.html" class="btn">Start Crossword</a>
             </div>
 
-            <!-- CARD 2: WORD SEARCH -->
+            <!-- CARD 2 -->
             <div class="card">
-                <div>
-                    <div class="card-icon">🔍</div>
-                    <h2>Word Search</h2>
-                    <p>Find the key operational concepts and acronyms hidden in the word grid as fast as you can.</p>
-                </div>
+                <span class="card-tag">PayIT</span>
+                <div class="card-icon">🔍</div>
+                <h2>Word Search</h2>
+                <p>Find the key operational concepts and acronyms hidden in the word grid as fast as you can.</p>
                 <a href="sopa_de_letras.html" class="btn">Start Word Search</a>
             </div>
 
-            <!-- CARD 3: SURVEYS -->
+            <!-- CARD 3 -->
             <div class="card card-purple">
-                <div>
-                    <div class="card-icon">📋</div>
-                    <h2>Surveys & Assessments</h2>
-                    <p>Complete Google Forms evaluations, operational questionnaires, and feedback forms.</p>
-                </div>
+                <span class="card-tag" style="background:#f3e8ff; color:#7e22ce;">PayIT</span>
+                <div class="card-icon">📋</div>
+                <h2>Surveys & Assessments</h2>
+                <p>Complete Google Forms evaluations, operational questionnaires, and feedback forms.</p>
                 <a href="encuestas.html" class="btn btn-purple">View Surveys</a>
             </div>
         </div>
+
+        <!-- NOTA INFORMATIVA AL FINAL DE LA PÁGINA -->
+        <div class="notice-banner">
+            <span>📌</span>
+            <span><strong>Important Note:</strong> PayIT campaign agents, please complete the dedicated PayIT campaign activities prior to accessing the Agent HUB modules.</span>
+        </div>
+
+        <!-- AGENT HUB CALLOUT -->
+        <div class="agent-hub-banner">
+            <div class="agent-hub-text">
+                <h3>🎮 Agent HUB — General Skill Building & Break Activities</h3>
+                <p>Practice typing, boost your soft skills, or take a quick mental refresh between contacts.</p>
+            </div>
+            <a href="agent_hub.html" class="btn-hub">Explore Agent HUB →</a>
+        </div>
+
     </div>
 
     <footer>
